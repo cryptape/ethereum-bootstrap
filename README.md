@@ -25,6 +25,10 @@
   ![private-started.png](screenshots/private-started.png)
 4. 此时以太坊交互式控制台已经启动，我们可以开始测试和开发了。
 
+注意：工具脚本假设你的geth安装在默认位置, 可以直接通过`geth`执行。如果`geth`命令安装在非标准的位置，可以设置`GETH`环境变量指定geth可执行文件的路径。例如:
+
+`GETH=/some/weird/dir/geth ./bin/import_keys.sh`
+
 ## 使用以太坊控制台编译和部署智能合约
 
 在`contracts`目录下有一个智能合约样例文件`Token.sol`, 通过Solidity语言实现了基本的代币功能, 合约持有者可以发行代币, 使用者可以互相转账.
