@@ -87,7 +87,7 @@ var token = contract.new(initializer, callback);
 在公有链上，矿工打包平均需要15秒，在私有链上，我们需要自己来做这件事情．首先开启挖矿：
 
 ```javascript
-web3.miner.start(1)
+miner.start(1)
 ```
 
 此时需要等待一段时间，以太坊节点会生成挖矿必须的数据，这些数据都会放到内存里面．在数据生成好之后，挖矿就会开始，稍后就能在控制台输出中看到类似：
@@ -99,7 +99,7 @@ web3.miner.start(1)
 的信息，这说明挖到了一个块，合约已经部署到以太坊网络上了！此时我们可以把挖矿关闭：
 
 ```javascript
-web3.miner.stop(1)
+miner.stop(1)
 ```
 
 接下来我们就可以调用合约了．先通过`token.address`获得合约部署到的地址, 以后新建合约对象时可以使用．这里我们直接使用原来的contract对象：
@@ -115,9 +115,9 @@ I1221 11:48:30.512296   11155 xeth.go:1055] Tx(0xc0712460a826bfea67d58a30f584e4b
 "0xc0712460a826bfea67d58a30f584e4bebdbb6138e7e6bc1dbd6880d2fce3a8ef"
 
 // 发行token是一个transaction, 因此需要挖矿使之生效
-> web3.miner.start()
+> miner.start(1)
 :hammer:Mined block
-> web3.miner.stop()
+> miner.stop(1)
 
 // 再次查询本地钱包第一个地址的token数量
 > token.getBalance(web3.eth.accounts[0])
@@ -127,8 +127,8 @@ I1221 11:48:30.512296   11155 xeth.go:1055] Tx(0xc0712460a826bfea67d58a30f584e4b
 > token.transfer.sendTransaction(web3.eth.accounts[1], 30, {from: web3.eth.accounts[0]})
 I1221 11:53:31.852541   11155 xeth.go:1055] Tx(0x1d209cef921dea5592d8604ac0da680348987b131235943e372f8df35fd43d1b) to: 0x37dc85ae239ec39556ae7cc35a129698152afe3c
 "0x1d209cef921dea5592d8604ac0da680348987b131235943e372f8df35fd43d1b"
-> web3.miner.start()
-> web3.miner.stop()
+> miner.start(1)
+> miner.stop(2)
 > token.getBalance(web3.eth.accounts[0])
 70
 > token.getBalance(web3.eth.accounts[1])
