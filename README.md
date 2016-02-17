@@ -13,7 +13,7 @@
 
 ## 准备
 
-1. 在本地安装好[go-ethereum](https://github.com/ethereum/go-ethereum), 可以执行`geth`命令。
+1. 在本地安装好[go-ethereum](https://github.com/ethereum/go-ethereum)和[solc](http://solidity.readthedocs.org/en/latest/), 可以执行`geth`和`solc`命令。如果操作系统是ubuntu, 安装官方的ethereum安装包即可。
 2. 将本仓库通过`git clone`命令下载到本地。
 3. 安装[expect](http://expect.sourceforge.net/)，工具脚本用它来自动化一些过程。例如在ubuntu上: `sudo apt-get install expect`
 
@@ -21,7 +21,7 @@
 
 1. 进入本仓库目录: `cd ethereum-bootstrap`
 2. 导入测试账户私钥: `./bin/import_keys.sh`
-3. 启动私有链节点: `./bin/private-blockchain.sh`. 启动成功后可以看到类似如下输出:
+3. 启动私有链节点: `./bin/private_blockchain.sh`. 启动成功后可以看到类似如下输出:
   ![private-started.png](screenshots/private-started.png)
 4. 此时以太坊交互式控制台已经启动，我们可以开始测试和开发了。
 
@@ -87,7 +87,7 @@ var token = contract.new(initializer, callback);
 在公有链上，矿工打包平均需要15秒，在私有链上，我们需要自己来做这件事情．首先开启挖矿：
 
 ```javascript
-web3.miner.start()
+web3.miner.start(1)
 ```
 
 此时需要等待一段时间，以太坊节点会生成挖矿必须的数据，这些数据都会放到内存里面．在数据生成好之后，挖矿就会开始，稍后就能在控制台输出中看到类似：
@@ -99,7 +99,7 @@ web3.miner.start()
 的信息，这说明挖到了一个块，合约已经部署到以太坊网络上了！此时我们可以把挖矿关闭：
 
 ```javascript
-web3.miner.stop()
+web3.miner.stop(1)
 ```
 
 接下来我们就可以调用合约了．先通过`token.address`获得合约部署到的地址, 以后新建合约对象时可以使用．这里我们直接使用原来的contract对象：
