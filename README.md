@@ -21,9 +21,15 @@
 
 1. 进入本仓库目录: `cd ethereum-bootstrap`
 2. 导入测试账户私钥: `./bin/import_keys.sh`
-3. 启动私有链节点: `./bin/private_blockchain.sh`. 启动成功后可以看到类似如下输出:
+3. 初始化blockchain: `./bin/private_blockchain_init.sh`
+输出的结果类似如下：
+```
+I0822 16:28:29.767646 ethdb/database.go:82] Alloted 16MB cache and 16 file handles to data/chaindata
+I0822 16:28:29.773596 cmd/geth/main.go:299] successfully wrote genesis block and/or chain rule set: 19425866b7d3298a15ad79accf302ba9d21859174e7ae99ce552e05f13f0efa3
+```
+4. 启动私有链节点: `./bin/private_blockchain.sh`. 启动成功后可以看到类似如下输出:
   ![private-started.png](screenshots/private-started.png)
-4. 此时以太坊交互式控制台已经启动，我们可以开始测试和开发了。
+5. 此时以太坊交互式控制台已经启动，我们可以开始测试和开发了。
 
 注意：工具脚本假设你的geth安装在默认位置, 可以直接通过`geth`执行。如果`geth`命令安装在非标准的位置，可以设置`GETH`环境变量指定geth可执行文件的路径。例如:
 
