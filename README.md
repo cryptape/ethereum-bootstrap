@@ -35,6 +35,36 @@ I0822 16:28:29.773596 cmd/geth/main.go:299] successfully wrote genesis block and
 
 `GETH=/some/weird/dir/geth ./bin/import_keys.sh`
 
+## 创建账号
+查看所有的账号：
+```
+> personal.listAccounts
+[]
+```
+可以通过以下命令来创建账号：
+```
+> personal.newAccount('123456')
+"0x7fe4634bff7241c6ecf8baed29a4c3cb717c336c"
+```
+查看账号余额：
+```
+> web3.eth.getBalance(web3.eth.accounts[0])
+0
+```
+可以通过挖矿的方式给第一个账号发行ether：
+```
+> miner.start(1)
+I0822 17:17:43.496826 miner/miner.go:119] Starting mining operation (CPU=1 TOT=3)
+I0822 17:17:43.497379 miner/worker.go:573] commit new work on block 30 with 0 txs & 1 uncles. Took 527.407µs
+```
+需要调用miner.stop来停止挖矿：
+```
+> miner.stop()
+true
+> web3.eth.getBalance(web3.eth.accounts[0])
+309531250000000000000
+```
+
 ## 使用以太坊控制台编译和部署智能合约
 
 在`contracts`目录下有一个智能合约样例文件`Token.sol`, 通过Solidity语言实现了基本的代币功能, 合约持有者可以发行代币, 使用者可以互相转账.
@@ -112,7 +142,7 @@ miner.stop(1)
 
 ```
 // 本地钱包的第一个地址所持有的token数量
-> token.getBalance(web3.eth.accounts[0])
+> web3.eth.getBalance(web3.eth.accounts[0])
 0
 
 // 发行100个token给本地钱包的第一个地址
@@ -123,7 +153,7 @@ I1221 11:48:30.512296   11155 xeth.go:1055] Tx(0xc0712460a826bfea67d58a30f584e4b
 // 发行token是一个transaction, 因此需要挖矿使之生效
 > miner.start(1)
 :hammer:Mined block
-> miner.stop(1)
+> miner.stop()
 
 // 再次查询本地钱包第一个地址的token数量
 > token.getBalance(web3.eth.accounts[0])
