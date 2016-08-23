@@ -23,10 +23,10 @@
 2. 导入测试账户私钥: `./bin/import_keys.sh`
 3. 初始化blockchain: `./bin/private_blockchain_init.sh`
    输出的结果类似如下：
-  ```
+   ```
     I0822 16:28:29.767646 ethdb/database.go:82] Alloted 16MB cache and 16 file handles to data/chaindata
     I0822 16:28:29.773596 cmd/geth/main.go:299] successfully wrote genesis block and/or chain rule set: 19425866b7d3298a15ad79accf302ba9d21859174e7ae99ce552e05f13f0efa3
-  ```
+   ```
 4. 启动私有链节点: `./bin/private_blockchain.sh`. 启动成功后可以看到类似如下输出:
   ![private-started.png](screenshots/private-started.png)
 5. 此时以太坊交互式控制台已经启动，我们可以开始测试和开发了。
@@ -35,17 +35,7 @@
 
 `GETH=/some/weird/dir/geth ./bin/import_keys.sh`
 
-## 创建账号
-查看所有的账号：
-```
-> personal.listAccounts
-[]
-```
-可以通过以下命令来创建账号：
-```
-> personal.newAccount('123456')
-"0x7fe4634bff7241c6ecf8baed29a4c3cb717c336c"
-```
+## 通过挖矿来为账号来为account发放ether
 查看账号余额：
 ```
 > web3.eth.getBalance(web3.eth.accounts[0])
@@ -174,6 +164,7 @@ I1221 11:53:31.852541   11155 xeth.go:1055] Tx(0x1d209cef921dea5592d8604ac0da680
 ## 其他
 
 私有链的所有数据都会放在仓库根目录下的`data`目录中，删除这个目录可以清除所有数据，重新启动新环境。
+[solidity_compiler_helper]，https://github.com/rakeshbs/solidity_compiler_helper，可以使用这个小工具来部署，更方便。
+
 
 获取关于以太坊的更多信息请访问[EthFans](http://ethfans.org).
-
