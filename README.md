@@ -35,7 +35,7 @@
 
 `GETH=/some/weird/dir/geth ./bin/import_keys.sh`
 
-## 通过挖矿来为账号来为account发放ether
+## 通过挖矿来为account发放ether
 查看账号余额：
 ```
 > web3.eth.getBalance(web3.eth.accounts[0])
@@ -129,7 +129,7 @@ miner.start(1)
 的信息，这说明挖到了一个块，合约已经部署到以太坊网络上了！此时我们可以把挖矿关闭：
 
 ```javascript
-miner.stop(1)
+miner.stop()
 ```
 
 接下来我们就可以调用合约了．先通过`token.address`获得合约部署到的地址, 以后新建合约对象时可以使用．这里我们直接使用原来的contract对象：
@@ -158,7 +158,7 @@ I1221 11:48:30.512296   11155 xeth.go:1055] Tx(0xc0712460a826bfea67d58a30f584e4b
 I1221 11:53:31.852541   11155 xeth.go:1055] Tx(0x1d209cef921dea5592d8604ac0da680348987b131235943e372f8df35fd43d1b) to: 0x37dc85ae239ec39556ae7cc35a129698152afe3c
 "0x1d209cef921dea5592d8604ac0da680348987b131235943e372f8df35fd43d1b"
 > miner.start(1)
-> miner.stop(2)
+> miner.stop()
 > token.getBalance(web3.eth.accounts[0])
 70
 > token.getBalance(web3.eth.accounts[1])
