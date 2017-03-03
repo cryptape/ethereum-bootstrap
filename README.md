@@ -27,9 +27,11 @@
     I0822 16:28:29.767646 ethdb/database.go:82] Alloted 16MB cache and 16 file handles to data/chaindata
     I0822 16:28:29.773596 cmd/geth/main.go:299] successfully wrote genesis block and/or chain rule set: 19425866b7d3298a15ad79accf302ba9d21859174e7ae99ce552e05f13f0efa3
    ```
-4. 启动私有链节点: `./bin/private_blockchain.sh`. 启动成功后可以看到类似如下输出:
+4. 为解决之后操作账户锁定问题，修改本目录下bin/private_blockchain.sh文件，在$geth后添加--unlock 0 --password value.
+   其中value为你建立的包含你第2步设置的密码的文件地址。
+5. 启动私有链节点: `./bin/private_blockchain.sh`. 启动成功后可以看到类似如下输出:
   ![private-started.png](screenshots/private-started.png)
-5. 此时以太坊交互式控制台已经启动，我们可以开始测试和开发了。
+6. 此时以太坊交互式控制台已经启动，我们可以开始测试和开发了。
 
 注意：工具脚本假设你的geth安装在默认位置, 可以直接通过`geth`执行。如果`geth`命令安装在非标准的位置，可以设置`GETH`环境变量指定geth可执行文件的路径。例如:
 
@@ -65,7 +67,7 @@ true
 
 我们可以使用以太坊控制台来编译部署这个合约．以太坊控制台是最基本的工具，使用会比较繁琐．社区也提供了其他更加方便的部署工具，此处不做讨论．
 
-第一步，我们先把合约代码压缩为一行．新建一个ssh session, 切换到geth用户环境`su - geth`, 然后输入：`cat contracts/Token.sol | tr '\n' ' '`.
+第一步，我们先把合约代码压缩为一行．新建一个ssh session, 切换到geth用户环境`su - geth`, 然后输入：`cat contracts/Token.sol | tr '\n' ' '`.(此步为消除换行提取合约代码，可直接在终端进行，也可直接复制后面代码)
 
 切换到以太坊控制台，把合约代码保存为一个变量:
 
@@ -79,14 +81,14 @@ var tokenSource = 'contract Token {     address issuer;     mapping (address => 
 var tokenCompiled = web3.eth.compile.solidity(tokenSource);
 ```
 
-通过`tokenCompiled.Token.code`可以看到编译好的二进制代码，通过`tokenCompiled.Token.info.abiDefinition`可以看到合约的[ABI](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI)．
+通过`tokenCompiled['<stdin>:Token'].code`可以看到编译好的二进制代码，通过`tokenCompiled['<stdin>:Token'].info.abiDefinition`可以看到合约的[ABI](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI)．
 
 接下来我们要把编译好的合约部署到网络上去．
 
 首先我们用ABI来创建一个javascript环境中的合约对象：
 
 ```javascript
-var contract = web3.eth.contract(tokenCompiled.Token.info.abiDefinition);
+var contract = web3.eth.contract(tokenCompiled['<stdin>:Token'].info.abiDefinition);
 ```
 
 我们通过合约对象来部署合约：
