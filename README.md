@@ -28,7 +28,7 @@
     I0822 16:28:29.773596 cmd/geth/main.go:299] successfully wrote genesis block and/or chain rule set: 19425866b7d3298a15ad79accf302ba9d21859174e7ae99ce552e05f13f0efa3
    ```
 4. 为解决之后操作账户锁定问题，修改本目录下bin/private_blockchain.sh文件，在$geth后添加--unlock 0 --password value.
-   其中value为你建立的包含你第2步设置的密码的文件地址。
+   其中value为你建立的包含你第2步设置的密码的文件地址。这样下面就不需要再解锁账户的操作。
 5. 启动私有链节点: `./bin/private_blockchain.sh`. 启动成功后可以看到类似如下输出:
   ![private-started.png](screenshots/private-started.png)
 6. 此时以太坊交互式控制台已经启动，我们可以开始测试和开发了。
@@ -94,7 +94,7 @@ var contract = web3.eth.contract(tokenCompiled['<stdin>:Token'].info.abiDefiniti
 我们通过合约对象来部署合约：
 
 ```javascript
-var initializer = {from: web3.eth.accounts[0], data: tokenCompiled.Token.code, gas: 300000};
+var initializer = {from: web3.eth.accounts[0], data: tokenCompiled['<stdin>:Token'].code, gas: 300000};
 
 var callback = function(e, contract){
     if(!e) {
