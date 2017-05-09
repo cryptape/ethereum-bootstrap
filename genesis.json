@@ -1,4 +1,10 @@
 {
+    "config": {
+      "chainId": 15,
+      "homesteadBlock": 0,
+      "eip155Block": 0,
+      "eip158Block": 0
+  },
   "alloc": {
     "3ae88fe370c39384fc16da2c9e768cf5d2495b48": {
       "balance": "1000000000000000000000000000000"
