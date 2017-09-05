@@ -6,5 +6,5 @@ set geth [lindex $argv 2]
 
 spawn $geth --datadir data account import $key
 expect "Passphrase:"  {send "$password\n"}
-expect "Repeat Passphrase:" {send "$password\n"}
+expect "Repeat passphrase:" {send "$password\n"}
 interact
