@@ -56,7 +56,7 @@ I0822 17:17:43.497379 miner/worker.go:573] commit new work on block 30 with 0 tx
 > miner.stop()
 true
 > web3.eth.getBalance(web3.eth.accounts[0])
-309531250000000000000
+2.000000000105e+30
 ```
 使用账号前先解锁：
 ```
@@ -69,47 +69,35 @@ true
 
 我们可以使用以太坊控制台来编译部署这个合约．以太坊控制台是最基本的工具，使用会比较繁琐．社区也提供了其他更加方便的部署工具，此处不做讨论．
 
-第一步，我们先把合约代码压缩为一行．新建一个ssh session, 切换到geth用户环境`su - geth`, 然后输入：`cat contracts/Token.sol | tr '\n' ' '`.(此步为消除换行提取合约代码，可直接在终端进行，也可直接复制后面代码)
+第一步，我们先编译合约代码．新建一个ssh session, 切换到geth用户环境`su - geth`, 然后输入：``echo "var tokenCompiled=`solc --optimize --combined-json abi,bin,interface contracts/Token.sol`" > token.js``.(此步为编译合约代码，并在当前路径下生成token.js文件)
 
-切换到以太坊控制台，把合约代码保存为一个变量:
-
-```javascript
-var tokenSource = 'contract Token {     address issuer;     mapping (address => uint) balances;      event Issue(address account, uint amount);     event Transfer(address from, address to, uint amount);      function Token() {         issuer = msg.sender;     }      function issue(address account, uint amount) {         if (msg.sender != issuer) throw;         balances[account] += amount;     }      function transfer(address to, uint amount) {         if (balances[msg.sender] < amount) throw;          balances[msg.sender] -= amount;         balances[to] += amount;          Transfer(msg.sender, to, amount);     }      function getBalance(address account) constant returns (uint) {         return balances[account];     } }';
-```
-
-然后编译合约代码：
+切换到以太坊控制台，把js文件加载进来:
 
 ```javascript
-var tokenCompiled = web3.eth.compile.solidity(tokenSource);
+loadScript("token.js")
 ```
 
-通过`tokenCompiled['<stdin>:Token'].code`可以看到编译好的二进制代码，通过`tokenCompiled['<stdin>:Token'].info.abiDefinition`可以看到合约的[ABI](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI)．
+通过`tokenCompiled.contracts["contracts/Token.sol:Token"].bin`可以看到编译好的二进制代码，通过`tokenCompiled.contracts["contracts/Token.sol:Token"].abi`可以看到合约的[ABI](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI)．
+以变量的形式取出合约的二进制代码和ABI。
+```javascript
+var tokenContractsBin = "0x" + tokenCompiled.contracts["contracts/Token.sol:Token"].bin;
+var tokenContractsAbi = tokenCompiled.contracts["contracts/Token.sol:Token"].abi;
+```
 
 接下来我们要把编译好的合约部署到网络上去．
 
 首先我们用ABI来创建一个javascript环境中的合约对象：
 
 ```javascript
-var contract = web3.eth.contract(tokenCompiled['<stdin>:Token'].info.abiDefinition);
+var contract = web3.eth.contract(JSON.parse(tokenContractsAbi));
 ```
 
 我们通过合约对象来部署合约：
 
 ```javascript
-var initializer = {from: web3.eth.accounts[0], data: tokenCompiled['<stdin>:Token'].code, gas: 300000};
+var initializer = {from: web3.eth.accounts[0], data: tokenContractsBin, gas: 300000};
 
-var callback = function(e, contract){
-    if(!e) {
-      if(!contract.address) {
-        console.log("Contract transaction send: TransactionHash: " + contract.transactionHash + " waiting to be mined...");
-      } else {
-        console.log("Contract mined!");
-        console.log(contract);
-      }
-    }
-};
-
-var token = contract.new(initializer, callback);
+var token = contract.new(initializer);
 ```
 
 `contract.new`方法的第一个参数设置了这个新合约的创建者地址`from`, 这个新合约的代码`data`, 和用于创建新合约的费用`gas`．`gas`是一个估计值，只要比所需要的gas多就可以，合约创建完成后剩下的gas会退还给合约创建者．
@@ -127,7 +115,7 @@ miner.start(1)
 此时需要等待一段时间，以太坊节点会生成挖矿必须的数据，这些数据都会放到内存里面．在数据生成好之后，挖矿就会开始，稍后就能在控制台输出中看到类似：
 
 ```
-:hammer:Mined block
+:hammer:mined potential block
 ```
 
 的信息，这说明挖到了一个块，合约已经部署到以太坊网络上了！此时我们可以把挖矿关闭：
@@ -150,7 +138,7 @@ I1221 11:48:30.512296   11155 xeth.go:1055] Tx(0xc0712460a826bfea67d58a30f584e4b
 
 // 发行token是一个transaction, 因此需要挖矿使之生效
 > miner.start(1)
-:hammer:Mined block
+:hammer:mined potential block
 > miner.stop()
 
 // 再次查询本地钱包第一个地址的token数量
@@ -162,6 +150,7 @@ I1221 11:48:30.512296   11155 xeth.go:1055] Tx(0xc0712460a826bfea67d58a30f584e4b
 I1221 11:53:31.852541   11155 xeth.go:1055] Tx(0x1d209cef921dea5592d8604ac0da680348987b131235943e372f8df35fd43d1b) to: 0x37dc85ae239ec39556ae7cc35a129698152afe3c
 "0x1d209cef921dea5592d8604ac0da680348987b131235943e372f8df35fd43d1b"
 > miner.start(1)
+:hammer:mined potential block
 > miner.stop()
 > token.getBalance(web3.eth.accounts[0])
 70
