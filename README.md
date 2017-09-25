@@ -30,7 +30,7 @@
 	INFO [09-25|11:07:26] Successfully wrote genesis state         database=lightchaindata                                      hash=194258…f0efa3
    ```
 4. 为解决之后操作账户锁定问题，修改本目录下bin/private_blockchain.sh文件，在$geth后添加--unlock 0 --password value.
-   其中value为你建立的包含你第2步设置的密码的文件地址。这样下面就不需要再解锁账户的操作。
+   其中0表示解锁第0个账户，value为包含你第2步设置的密码的文件的地址路径，需要你建立。这样下面就不需要再解锁账户的操作。
 5. 启动私有链节点: `./bin/private_blockchain.sh`. 启动成功后可以看到类似如下输出:
   ![private-started.png](screenshots/private-started.png)
 6. 此时以太坊交互式控制台已经启动，我们可以开始测试和开发了。
@@ -43,7 +43,7 @@
 查看账号余额：
 ```
 > web3.eth.getBalance(web3.eth.accounts[0])
-0
+2.00000000006e+30
 ```
 可以通过挖矿的方式给第一个账号发行ether：
 ```
