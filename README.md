@@ -22,10 +22,12 @@
 1. 进入本仓库目录: `cd ethereum-bootstrap`
 2. 导入测试账户私钥: `./bin/import_keys.sh`
 3. 初始化blockchain: `./bin/private_blockchain_init.sh`
-   输出的结果类似如下：
+   输出的结果类似如下, $(DIR))代表你的下载路径：
    ```
-    I0822 16:28:29.767646 ethdb/database.go:82] Alloted 16MB cache and 16 file handles to data/chaindata
-    I0822 16:28:29.773596 cmd/geth/main.go:299] successfully wrote genesis block and/or chain rule set: 19425866b7d3298a15ad79accf302ba9d21859174e7ae99ce552e05f13f0efa3
+    INFO [09-25|11:07:26] Allocated cache and file handles         database=$(DIR)/ethereum-bootstrap/data/geth/chaindata cache=16 handles=16
+	INFO [09-25|11:07:26] Successfully wrote genesis state         database=chaindata                                      hash=194258…f0efa3
+	INFO [09-25|11:07:26] Allocated cache and file handles         database=$(DIR)/ethereum-bootstrap/data/geth/lightchaindata cache=16 handles=16
+	INFO [09-25|11:07:26] Successfully wrote genesis state         database=lightchaindata                                      hash=194258…f0efa3
    ```
 4. 为解决之后操作账户锁定问题，修改本目录下bin/private_blockchain.sh文件，在$geth后添加--unlock 0 --password value.
    其中value为你建立的包含你第2步设置的密码的文件地址。这样下面就不需要再解锁账户的操作。
