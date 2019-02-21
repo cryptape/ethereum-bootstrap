@@ -7,9 +7,8 @@ contract Token {
     event Issue(address account, uint amount);
     event Transfer(address from, address to, uint amount);
 
-    constructor (address _issuer) public {
-        _issuer = msg.sender;
-        issuer = _issuer;
+    constructor () public {
+        issuer = msg.sender;
     }
 
     function issue(address account, uint amount) public {
